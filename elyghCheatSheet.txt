@@ -1,4 +1,5 @@
-Start project: "yarn dev"
+-Start project: "yarn dev"
+-Usernames in data > database-seed.json      passwords are all "s3cret"
 
 Overview
 This is a payment application (like Venmo) built to demonstrate Cypress testing. It has a React frontend and Express backend running as two separate servers.
