@@ -1,0 +1,39 @@
+Start project: "yarn dev"
+
+Overview
+This is a payment application (like Venmo) built to demonstrate Cypress testing. It has a React frontend and Express backend running as two separate servers.
+
+Frontend (src/)
+Framework: React 18 with Vite 7 dev server on port 3000
+Routing: React Router v5
+State management: XState v4 machines — no Redux or Context. All business logic (auth, transactions, notifications, UI drawers) lives in state machines under src/machines/
+UI: Material UI v5 with Emotion styling
+Entry point: src/index.tsx bootstraps the app with createRoot, Router, and ThemeProvider
+Root component: src/containers/App.tsx acts as an auth gate — renders either public (login) or private routes
+Backend (backend/)
+Framework: Express on port 3001
+Auth: Passport.js with local strategy + bcrypt, session-based (cookie: connect.sid)
+Database: lowdb — a flat JSON file at data/database.json. No Postgres, SQLite, or any external DB needed. 8 tables: users, contacts, bankaccounts, transactions, likes, comments, notifications, banktransfers
+Entry point: backend/app.ts
+Routes:
+login,
+logout,
+checkAuth— auth (in backend/auth.ts)users,contacts,bankAccounts,transactions,likes,comments,notifications,bankTransfer — REST endpointsgraphql— GraphQL endpoint (BankAccount only)testData— test helper routes for Cypress to seed/query the DB
+
+
+How They Communicate
+The frontend calls the backend directly via CORS (not through a Vite proxy):
+
+An Axios HTTP client (src/utils/asyncUtils.ts) is configured with withCredentials: true to send cookies
+It makes requests directly to http://localhost:3001
+The Express backend has CORS configured to allow requests from http://localhost:3000
+Authentication uses a session cookie (connect.sid) passed on every request
+Data Flow
+Browser (:3000)  →  Axios (httpClient)  →  Express (:3001)  →  lowdb  →  data/database.json
+
+Seed data lives in data/database-seed.json — all test users share the password s3cret. When you run yarn dev, the seed file is copied to database.json as the working database.
+
+Cypress Testing Layer
+Cypress tests live under cypress/tests/. The app exposes window.authService when window.Cypress is detected, letting E2E tests manipulate auth state directly. The
+testData
+ backend route lets Cypress reseed the database between tests via cy.task("db:seed").
