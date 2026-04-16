@@ -4,22 +4,27 @@ on:
   push:
     branches: [main]
   pull_request:
-    branches: [main]
+    branches: [main] #Tells GitHub when to run this workflow — whenever code is pushed to main or a pull request is opened/updated targeting main.
 
 jobs:
   cypress-tests:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest #Spins up a fresh Ubuntu virtual machine in GitHub's cloud to run the job.
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4 #Clones your repository code into the VM so the rest of the steps can access it.
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4 #Installs Node.js 22 on the VM and enables yarn caching so repeated runs don't re-download all packages from scratch.
         with:
           node-version: 22
           cache: yarn
 
-      - run: yarn install --frozen-lockfile
+      - run: yarn install --frozen-lockfile #Installs all dependencies exactly as specified in yarn.lock (no updates allowed, ensuring reproducible builds).
 
-      - uses: cypress-io/github-action@v6
+      - uses: cypress-io/github-action@v6 #The official Cypress GitHub Action. It does two things:
         with:
-          start: yarn start:ci
-          wait-on: "http://localhost:3000"
+          start: yarn start:ci #Launches the app (both the React frontend and the Express API backend) in the background.
+          wait-on: "http://localhost:3000" #Polls localhost:3000 until the app is ready, then runs cypress run in headless mode to execute all your Cypress E2E tests.
+          record: false #Disables recording to Cypress Cloud (no CYPRESS_RECORD_KEY needed)
+
+
+#On every push/PR to main: checkout code → install Node → install dependencies → start the app → wait for it → run all Cypress tests → report pass/fail.
+#If any test fails, the workflow fails and you'll see a red X on the commit/PR in GitHub.
