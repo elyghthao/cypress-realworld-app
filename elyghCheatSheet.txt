@@ -2,7 +2,7 @@
 -Usernames in data > database-seed.json      passwords are all "s3cret"
 
 
--github actions (ci/cd system) is setup to run with yml file: .github/workflows/node.js.yml
+-github actions (ci/cd system) is setup to run with yml file: .github/workflows/node.js.yml   -still hitting errors however
 
 Overview
 This is a payment application (like Venmo) built to demonstrate Cypress testing. It has a React frontend and Express backend running as two separate servers.
