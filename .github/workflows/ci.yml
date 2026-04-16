@@ -3,7 +3,7 @@ name: CI
 on:
   push:
     schedule:
-    - cron: "0 8 * * *" #Runs once daily at 8:00 AM UTC (1:00 AM PDT / 12:00 AM PST)
+    - cron: "0 8 * * *" #Runs once daily at 8:00 AM UTC (1:00 AM PDT / 12:00 AM PST)    test
     workflow_dispatch: #Adds a "Run workflow" button in GitHub Actions tab for manual triggers
   #   branches: [main, develop]
   # pull_request:
