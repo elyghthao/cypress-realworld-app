@@ -2,9 +2,12 @@ name: CI
 
 on:
   push:
-    branches: [main, develop]
-  pull_request:
-    branches: [main, develop] #Tells GitHub when to run this workflow — whenever code is pushed to main/develop branch or a pull request is opened/updated targeting them.
+    schedule:
+    - cron: "0 8 * * *" #Runs once daily at 8:00 AM UTC (1:00 AM PDT / 12:00 AM PST)
+    workflow_dispatch: #Adds a "Run workflow" button in GitHub Actions tab for manual triggers
+  #   branches: [main, develop]
+  # pull_request:
+  #   branches: [main, develop] #Tells GitHub when to run this workflow — whenever code is pushed to main/develop branch or a pull request is opened/updated targeting them.
 
 jobs:
   cypress-tests:
