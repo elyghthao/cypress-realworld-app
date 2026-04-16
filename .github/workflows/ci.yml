@@ -4,7 +4,7 @@ on:
   push:
     branches: [main, develop]
   pull_request:
-    branches: [main, develop] #Tells GitHub when to run this workflow — whenever code is pushed to main/develop or a pull request is opened/updated targeting them.
+    branches: [main, develop] #Tells GitHub when to run this workflow — whenever code is pushed to main/develop branch or a pull request is opened/updated targeting them.
 
 jobs:
   cypress-tests:
@@ -18,6 +18,8 @@ jobs:
           cache: yarn
 
       - run: yarn install --frozen-lockfile #Installs all dependencies exactly as specified in yarn.lock (no updates allowed, ensuring reproducible builds).
+
+      - run: yarn build:ci #Builds the React app into the build/ folder (required by start:ci's test server).
 
       - uses: cypress-io/github-action@v6 #The official Cypress GitHub Action. It does two things:
         with:
